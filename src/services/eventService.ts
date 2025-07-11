@@ -21,20 +21,29 @@ export class EventService {
   }
 
   private static transformApiEvent(apiEvent: ApiEvent): Event {
-    const eventDate = new Date(apiEvent.dataInicio);
+    const startDate = new Date(apiEvent.dataInicio);
     const now = new Date();
 
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const eventDateOnly = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
+    const eventDateOnly = new Date(
+      startDate.getFullYear(),
+      startDate.getMonth(),
+      startDate.getDate()
+    );
 
     return {
       id: apiEvent._id || Math.random().toString(36).substr(2, 9),
       title: apiEvent.titulo || 'Evento sem título',
       description: apiEvent.descricao || 'Descrição não disponível',
-      date: apiEvent.dataInicio,
-      time: eventDate.toISOString().slice(11, 16), // HH:mm extraído da data
-      location: apiEvent.criadoPor || '',
-      isPast: eventDateOnly < today
+      date: startDate.toISOString(), // Data completa em ISO
+      time: startDate.toLocaleTimeString('pt-BR', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+        timeZone: 'America/Sao_Paulo',
+      }),
+      location: apiEvent.local || '',
+      isPast: eventDateOnly < today,
     };
   }
 }

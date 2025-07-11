@@ -3,15 +3,14 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
+  base: '/site_calendario_shubudo/', // <-- necessário para GitHub Pages
   plugins: [react()],
   server: {
     proxy: {
-      // Todas requisições a /api serão proxied para o backend
       '/api': {
         target: 'http://3.17.71.237:3000',
         changeOrigin: true,
         secure: false,
-        // Remove o prefixo /api antes de enviar ao servidor
         rewrite: (path) => path.replace(/^\/api/, ''),
         configure: (proxy, _options) => {
           proxy.on('error', (err, _req, _res) => {
@@ -23,11 +22,11 @@ export default defineConfig({
           proxy.on('proxyRes', (proxyRes, req, _res) => {
             console.log(`Received proxy response: ${proxyRes.statusCode} for ${req.url}`);
           });
-        },
-      },
-    },
+        }
+      }
+    }
   },
   optimizeDeps: {
-    exclude: ['lucide-react'],
-  },
+    exclude: ['lucide-react']
+  }
 });
