@@ -1,6 +1,8 @@
 import { ApiEvent, Event } from '../types/event';
 
-const API_BASE_URL = '/api';
+const API_BASE_URL = import.meta.env.PROD
+  ? 'http://3.17.71.237:3000'
+  : '/api';
 
 export class EventService {
   static async fetchEvents(): Promise<Event[]> {
@@ -35,15 +37,15 @@ export class EventService {
       id: apiEvent._id || Math.random().toString(36).substr(2, 9),
       title: apiEvent.titulo || 'Evento sem título',
       description: apiEvent.descricao || 'Descrição não disponível',
-      date: startDate.toISOString(), // Data completa em ISO
+      date: apiEvent.dataInicio,
       time: startDate.toLocaleTimeString('pt-BR', {
         hour: '2-digit',
         minute: '2-digit',
         hour12: false,
-        timeZone: 'America/Sao_Paulo',
+        timeZone: 'America/Sao_Paulo'
       }),
       location: apiEvent.local || '',
-      isPast: eventDateOnly < today,
+      isPast: eventDateOnly < today
     };
   }
 }
