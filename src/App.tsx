@@ -19,13 +19,13 @@ function App() {
       default:
         return events;
     }
-  }, [activeFilter]);
+  }, [activeFilter, events]); // ✅ Corrigido
 
   const eventCounts = useMemo(() => ({
     all: events.length,
     upcoming: events.filter(event => !event.isPast).length,
     past: events.filter(event => event.isPast).length
-  }), []);
+  }), [events]); // ✅ Corrigido
 
   const sortedEvents = useMemo(() => {
     return [...filteredEvents].sort((a, b) => {
@@ -33,11 +33,10 @@ function App() {
       const dateB = new Date(`${b.date} ${b.time}`);
       
       if (activeFilter === 'upcoming') {
-        return dateA.getTime() - dateB.getTime(); // Próximos primeiro
+        return dateA.getTime() - dateB.getTime();
       } else if (activeFilter === 'past') {
-        return dateB.getTime() - dateA.getTime(); // Mais recentes primeiro
+        return dateB.getTime() - dateA.getTime();
       } else {
-        // Para 'all', mostra próximos primeiro, depois passados
         if (a.isPast !== b.isPast) {
           return a.isPast ? 1 : -1;
         }
@@ -51,7 +50,6 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
             <Calendar className="h-8 w-8 text-blue-600" />
@@ -62,7 +60,6 @@ function App() {
           </p>
         </div>
 
-        {/* Filters */}
         <div className="flex items-center gap-3 mb-6">
           <Filter className="h-5 w-5 text-gray-500" />
           <span className="text-gray-700 font-medium">Filtrar por:</span>
@@ -74,7 +71,6 @@ function App() {
           eventCounts={eventCounts}
         />
 
-        {/* Events List */}
         {loading ? (
           <LoadingSpinner />
         ) : error ? (
@@ -97,7 +93,6 @@ function App() {
           </div>
         )}
 
-        {/* Footer */}
         <div className="text-center mt-16 pt-8 border-t border-gray-200">
           <p className="text-gray-500">
             Mantenha-se conectado para não perder nenhum evento!
