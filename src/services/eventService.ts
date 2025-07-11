@@ -1,7 +1,8 @@
 import { ApiEvent, Event } from '../types/event';
 
+// Usa o backend externo em produção, proxy local em dev
 const API_BASE_URL = import.meta.env.PROD
-  ? 'http://3.17.71.237:3000'
+  ? 'https://3.17.71.237:3000' // ✅ Use https para evitar bloqueios em produção
   : '/api';
 
 export class EventService {
