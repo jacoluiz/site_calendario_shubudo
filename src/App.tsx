@@ -1,17 +1,15 @@
 import React, { useState, useMemo } from 'react';
 import { Calendar, Filter, Plus } from 'lucide-react';
 import { EventCard } from './components/EventCard';
-import { EventForm } from './components/EventForm';
+import { CreateEventPage } from './components/CreateEventPage';
 import { FilterButtons } from './components/FilterButtons';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { ErrorMessage } from './components/ErrorMessage';
 import { useEvents } from './hooks/useEvents';
-import { EventService } from './services/eventService';
 
 function App() {
   const [activeFilter, setActiveFilter] = useState<'all' | 'upcoming' | 'past'>('all');
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [isCreating, setIsCreating] = useState(false);
   const { events, loading, error, refetch } = useEvents();
 
   const filteredEvents = useMemo(() => {
@@ -53,31 +51,12 @@ function App() {
     });
   }, [filteredEvents, activeFilter]);
 
-  const handleCreateEvent = async (eventData: any) => {
-    try {
-      setIsCreating(true);
-      await EventService.createEvent(eventData);
-      setShowCreateForm(false);
-      refetch(); // Recarregar a lista de eventos
-    } catch (error) {
-      console.error('Erro ao criar evento:', error);
-      throw error;
-    } finally {
-      setIsCreating(false);
-    }
-  };
-
   if (showCreateForm) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
-        <div className="container mx-auto px-4">
-          <EventForm
-            onSubmit={handleCreateEvent}
-            onCancel={() => setShowCreateForm(false)}
-            loading={isCreating}
-          />
-        </div>
-      </div>
+      <CreateEventPage
+        onBack={() => setShowCreateForm(false)}
+        onEventCreated={refetch}
+      />
     );
   }
 

@@ -68,20 +68,7 @@ export function EventForm({ onSubmit, onCancel, loading = false }: EventFormProp
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 max-w-2xl mx-auto">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-          <Calendar className="h-6 w-6 text-blue-600" />
-          Novo Evento
-        </h2>
-        <button
-          onClick={onCancel}
-          className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
-          disabled={loading}
-        >
-          <X className="h-5 w-5" />
-        </button>
-      </div>
+    <div className="bg-white rounded-xl shadow-lg p-8">
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Título */}
