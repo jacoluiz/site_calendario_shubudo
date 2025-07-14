@@ -4,7 +4,6 @@ interface CreateEventData {
   titulo: string;
   descricao: string;
   dataInicio: string;
-  dataFim?: string;
   local?: string;
 }
 

@@ -5,7 +5,6 @@ interface EventFormData {
   titulo: string;
   descricao: string;
   dataInicio: string;
-  dataFim: string;
   local: string;
 }
 
@@ -20,7 +19,6 @@ export function EventForm({ onSubmit, onCancel, loading = false }: EventFormProp
     titulo: '',
     descricao: '',
     dataInicio: '',
-    dataFim: '',
     local: ''
   });
 
@@ -41,14 +39,6 @@ export function EventForm({ onSubmit, onCancel, loading = false }: EventFormProp
       newErrors.dataInicio = 'Data de início é obrigatória';
     }
 
-    if (formData.dataFim && formData.dataInicio) {
-      const startDate = new Date(formData.dataInicio);
-      const endDate = new Date(formData.dataFim);
-      
-      if (endDate <= startDate) {
-        newErrors.dataFim = 'Data de fim deve ser posterior à data de início';
-      }
-    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -155,25 +145,6 @@ export function EventForm({ onSubmit, onCancel, loading = false }: EventFormProp
           )}
         </div>
 
-        {/* Data e Hora de Fim */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            <Clock className="h-4 w-4 inline mr-1" />
-            Data e Hora de Fim (opcional)
-          </label>
-          <input
-            type="datetime-local"
-            value={formData.dataFim}
-            onChange={(e) => handleInputChange('dataFim', e.target.value)}
-            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-              errors.dataFim ? 'border-red-500' : 'border-gray-300'
-            }`}
-            disabled={loading}
-          />
-          {errors.dataFim && (
-            <p className="text-red-500 text-sm mt-1">{errors.dataFim}</p>
-          )}
-        </div>
 
         {/* Local */}
         <div>
