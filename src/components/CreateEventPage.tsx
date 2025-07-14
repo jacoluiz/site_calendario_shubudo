@@ -15,6 +15,7 @@ export function CreateEventPage() {
       setIsCreating(true);
       const createdEvent = await EventService.createEvent(eventData);
       setCreatedEventTitle(eventData.titulo);
+      console.log("Evento criado, exibindo popup!");
       setShowSuccessPopup(true);
     } catch (error) {
       console.error('Erro ao criar evento:', error);
@@ -57,7 +58,7 @@ export function CreateEventPage() {
       {/* Popup de Sucesso */}
       {showSuccessPopup && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 transform animate-pulse">
+          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 transform">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <CheckCircle className="h-8 w-8 text-green-500" />

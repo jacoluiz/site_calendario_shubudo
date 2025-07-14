@@ -52,24 +52,31 @@ export class EventService {
   }
 
   private static transformApiEvent(apiEvent: ApiEvent): Event {
-    const startDate = new Date(apiEvent.dataInicio);
-    const now = new Date();
+  const rawDate = apiEvent.dataInicio;
+  const startDate = rawDate ? new Date(rawDate) : new Date();
 
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const eventDateOnly = new Date(
-      startDate.getFullYear(),
-      startDate.getMonth(),
-      startDate.getDate()
-    );
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const eventDateOnly = new Date(
+    startDate.getFullYear(),
+    startDate.getMonth(),
+    startDate.getDate()
+  );
 
-    return {
-      id: apiEvent._id || Math.random().toString(36).substr(2, 9),
-      title: apiEvent.titulo || 'Evento sem título',
-      description: apiEvent.descricao || 'Descrição não disponível',
-      date: apiEvent.dataInicio,
-      time: apiEvent.dataInicio.substring(11, 16), // ← aqui pega exatamente a hora do banco (HH:MM)
-      location: apiEvent.local || '',
-      isPast: eventDateOnly < today
-    };
-  }
+  return {
+    id: apiEvent._id || Math.random().toString(36).substr(2, 9),
+    title: apiEvent.titulo || 'Evento sem título',
+    description: apiEvent.descricao || 'Descrição não disponível',
+    date: rawDate || '',
+
+    // Só extrai a hora se rawDate existir e for válida
+    time: rawDate && rawDate.length >= 16
+      ? rawDate.substring(11, 16)
+      : '',
+
+    location: apiEvent.local || '',
+    isPast: eventDateOnly < today
+  };
+}
+
 }
