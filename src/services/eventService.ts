@@ -1,6 +1,8 @@
 import { ApiEvent, Event } from '../types/event';
 
-const API_BASE_URL = '/api';
+const API_BASE_URL = import.meta.env.PROD
+  ? 'https://api.calendariokarate.click'
+  : '/api';
 
 export class EventService {
   static async fetchEvents(): Promise<Event[]> {
