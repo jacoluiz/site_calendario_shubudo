@@ -87,6 +87,7 @@ function EventListPage() {
 
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
+          </div>
         </div>
 
         <FilterButtons
