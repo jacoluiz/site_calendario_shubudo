@@ -13,9 +13,6 @@ function App() {
   // Verifica se a URL contém /criar para mostrar a página de criação
   const showCreateForm = window.location.pathname === '/criar';
 
-  // Verifica se a URL contém /criar para mostrar a página de criação
-  const showCreateForm = window.location.pathname === '/criar';
-
   const filteredEvents = useMemo(() => {
     switch (activeFilter) {
       case 'upcoming':
