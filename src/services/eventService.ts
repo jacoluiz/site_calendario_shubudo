@@ -1,6 +1,5 @@
 import { ApiEvent, Event } from '../types/event';
 
-// Sempre usa o proxy para /api – funciona tanto no dev (vite.config.ts) quanto em prod (nginx)
 const API_BASE_URL = '/api';
 
 export class EventService {
