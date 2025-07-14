@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Calendar, Filter, Plus } from 'lucide-react';
+import { Calendar, Filter } from 'lucide-react';
 import { EventCard } from './components/EventCard';
 import { CreateEventPage } from './components/CreateEventPage';
 import { FilterButtons } from './components/FilterButtons';
@@ -8,9 +8,13 @@ import { ErrorMessage } from './components/ErrorMessage';
 import { useEvents } from './hooks/useEvents';
 
 function App() {
-  const [activeFilter, setActiveFilter] = useState<'all' | 'upcoming' | 'past'>('all');
-  const [showCreateForm, setShowCreateForm] = useState(false);
   const { events, loading, error, refetch } = useEvents();
+
+  // Verifica se a URL contém /criar para mostrar a página de criação
+  const showCreateForm = window.location.pathname === '/criar';
+
+  // Verifica se a URL contém /criar para mostrar a página de criação
+  const showCreateForm = window.location.pathname === '/criar';
 
   const filteredEvents = useMemo(() => {
     switch (activeFilter) {
@@ -54,7 +58,7 @@ function App() {
   if (showCreateForm) {
     return (
       <CreateEventPage
-        onBack={() => setShowCreateForm(false)}
+        onBack={() => window.history.pushState({}, '', '/')}
         onEventCreated={refetch}
       />
     );
@@ -74,28 +78,6 @@ function App() {
           </p>
         </div>
 
-        {/* Botão Criar Evento */}
-        <div className="flex justify-end mb-6">
-          <button
-            onClick={() => setShowCreateForm(true)}
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors flex items-center gap-2"
-          >
-            <Plus className="h-4 w-4" />
-            Criar Evento
-          </button>
-        </div>
-
-        {/* Filtros */}
-        <div className="flex items-center gap-3 mb-6">
-          <Filter className="h-5 w-5 text-gray-500" />
-          <span className="text-gray-700 font-medium">Filtrar por:</span>
-        </div>
-
-        <FilterButtons
-          activeFilter={activeFilter}
-          onFilterChange={setActiveFilter}
-          eventCounts={eventCounts}
-        />
 
         {/* Conteúdo */}
         {loading ? (

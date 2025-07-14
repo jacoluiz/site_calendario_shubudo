@@ -36,7 +36,7 @@ export function CreateEventPage({ onBack, onEventCreated }: CreateEventPageProps
             disabled={isCreating}
           >
             <ArrowLeft className="h-5 w-5" />
-            Voltar para eventos
+            Voltar
           </button>
           
           <div className="text-center">
