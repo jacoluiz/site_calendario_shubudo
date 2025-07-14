@@ -1,9 +1,7 @@
 import { ApiEvent, Event } from '../types/event';
 
-// Usa o backend externo em produção, proxy local em dev
-const API_BASE_URL = import.meta.env.PROD
-  ? 'https://3.17.71.237:3000' // ✅ Use https para evitar bloqueios em produção
-  : '/api';
+// Sempre usa o proxy para /api – funciona tanto no dev (vite.config.ts) quanto em prod (nginx)
+const API_BASE_URL = '/api';
 
 export class EventService {
   static async fetchEvents(): Promise<Event[]> {
