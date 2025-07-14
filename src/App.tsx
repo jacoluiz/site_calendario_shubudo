@@ -53,13 +53,40 @@ function EventListPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Calendar className="h-8 w-8 text-blue-600" />
-            <h1 className="text-4xl font-bold text-gray-900">Eventos</h1>
+          <div className="flex items-center justify-center gap-8 mb-6">
+            {/* Imagem esquerda */}
+            <div className="hidden md:block">
+              <img 
+                src="https://images.pexels.com/photos/7045732/pexels-photo-7045732.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop" 
+                alt="Logo esquerda" 
+                className="w-24 h-24 object-cover rounded-full shadow-lg"
+              />
+            </div>
+            
+            {/* Título central */}
+            <div className="flex flex-col items-center">
+              <div className="flex items-center justify-center gap-3 mb-2">
+                <Calendar className="h-8 w-8 text-blue-600" />
+                <h1 className="text-4xl font-bold text-gray-900">Eventos</h1>
+              </div>
+              <p className="text-gray-600 text-lg max-w-2xl">
+                CDL TEAM - Karatê Shubu-Dô Agenda online
+              </p>
+            </div>
+            
+            {/* Imagem direita */}
+            <div className="hidden md:block">
+              <img 
+                src="https://images.pexels.com/photos/7045836/pexels-photo-7045836.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop" 
+                alt="Logo direita" 
+                className="w-24 h-24 object-cover rounded-full shadow-lg"
+              />
+            </div>
           </div>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            CDL TEAM - Karatê Shubu-Dô Agenda online
-          </p>
+        </div>
+
+        <div className="text-center mb-12">
+          <div className="flex items-center justify-center gap-3 mb-4">
         </div>
 
         <FilterButtons
