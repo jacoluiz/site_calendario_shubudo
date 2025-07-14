@@ -1,5 +1,13 @@
 import { ApiEvent, Event } from '../types/event';
 
+interface CreateEventData {
+  titulo: string;
+  descricao: string;
+  dataInicio: string;
+  dataFim?: string;
+  local?: string;
+}
+
 const API_BASE_URL = import.meta.env.PROD
   ? 'https://api.calendariokarate.click'
   : '/api';
@@ -19,6 +27,28 @@ export class EventService {
     } catch (error) {
       console.error('Erro ao buscar eventos:', error);
       throw new Error('Falha ao carregar eventos. Verifique sua conexão.');
+    }
+  }
+
+  static async createEvent(eventData: CreateEventData): Promise<Event> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/datas`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(eventData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const createdEvent: ApiEvent = await response.json();
+      return this.transformApiEvent(createdEvent);
+    } catch (error) {
+      console.error('Erro ao criar evento:', error);
+      throw new Error('Falha ao criar evento. Verifique sua conexão.');
     }
   }
 

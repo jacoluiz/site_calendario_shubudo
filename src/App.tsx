@@ -1,13 +1,17 @@
 import React, { useState, useMemo } from 'react';
-import { Calendar, Filter } from 'lucide-react';
+import { Calendar, Filter, Plus } from 'lucide-react';
 import { EventCard } from './components/EventCard';
+import { EventForm } from './components/EventForm';
 import { FilterButtons } from './components/FilterButtons';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { ErrorMessage } from './components/ErrorMessage';
 import { useEvents } from './hooks/useEvents';
+import { EventService } from './services/eventService';
 
 function App() {
   const [activeFilter, setActiveFilter] = useState<'all' | 'upcoming' | 'past'>('all');
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
   const { events, loading, error, refetch } = useEvents();
 
   const filteredEvents = useMemo(() => {
@@ -49,6 +53,34 @@ function App() {
     });
   }, [filteredEvents, activeFilter]);
 
+  const handleCreateEvent = async (eventData: any) => {
+    try {
+      setIsCreating(true);
+      await EventService.createEvent(eventData);
+      setShowCreateForm(false);
+      refetch(); // Recarregar a lista de eventos
+    } catch (error) {
+      console.error('Erro ao criar evento:', error);
+      throw error;
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
+  if (showCreateForm) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
+        <div className="container mx-auto px-4">
+          <EventForm
+            onSubmit={handleCreateEvent}
+            onCancel={() => setShowCreateForm(false)}
+            loading={isCreating}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="container mx-auto px-4 py-8">
@@ -61,6 +93,17 @@ function App() {
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
             Descubra eventos incríveis e mantenha-se atualizado com as últimas oportunidades
           </p>
+        </div>
+
+        {/* Botão Criar Evento */}
+        <div className="flex justify-end mb-6">
+          <button
+            onClick={() => setShowCreateForm(true)}
+            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors flex items-center gap-2"
+          >
+            <Plus className="h-4 w-4" />
+            Criar Evento
+          </button>
         </div>
 
         {/* Filtros */}
