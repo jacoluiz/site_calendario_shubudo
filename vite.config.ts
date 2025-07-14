@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  base: '/site_calendario_shubudo/', // necessário para GitHub Pages
+  base: '/', // SEMPRE na raiz
   plugins: [react()],
   server: {
     proxy: {
