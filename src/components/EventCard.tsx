@@ -35,7 +35,7 @@ export function EventCard({ event }: EventCardProps) {
         </span>
       </div>
       
-      <p className={`text-gray-600 mb-4 leading-relaxed ${
+      <p className={`text-gray-600 mb-4 leading-relaxed whitespace-pre-line ${
         event.isPast ? 'opacity-75' : ''
       }`}>
         {event.description}
