@@ -9,6 +9,7 @@ import { useEvents } from './hooks/useEvents';
 
 function App() {
   const { events, loading, error, refetch } = useEvents();
+  const [activeFilter, setActiveFilter] = useState<'all' | 'upcoming' | 'past'>('all');
 
   // Verifica se a URL contém /criar para mostrar a página de criação
   const showCreateForm = window.location.pathname === '/criar';
@@ -75,6 +76,12 @@ function App() {
           </p>
         </div>
 
+        {/* Filtros */}
+        <FilterButtons
+          activeFilter={activeFilter}
+          onFilterChange={setActiveFilter}
+          eventCounts={eventCounts}
+        />
 
         {/* Conteúdo */}
         {loading ? (
