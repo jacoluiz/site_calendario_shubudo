@@ -52,50 +52,48 @@ function EventListPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="container mx-auto px-4 py-8">
+        {/* Header com imagens sempre visíveis */}
         <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-8 mb-6">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 mb-6">
             {/* Imagem esquerda */}
-            <div className="hidden md:block">
-              <img 
-                src="https://images.pexels.com/photos/7045732/pexels-photo-7045732.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop" 
-                alt="Logo esquerda" 
-                className="w-24 h-24 object-cover rounded-full shadow-lg"
+            <div>
+              <img
+                src="cdl.png"
+                alt="Logo esquerda"
+                className="w-24 h-24"
               />
             </div>
-            
+
             {/* Título central */}
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center text-center">
               <div className="flex items-center justify-center gap-3 mb-2">
                 <Calendar className="h-8 w-8 text-blue-600" />
-                <h1 className="text-4xl font-bold text-gray-900">Eventos</h1>
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-900">Eventos</h1>
               </div>
               <p className="text-gray-600 text-lg max-w-2xl">
                 CDL TEAM - Karatê Shubu-Dô Agenda online
               </p>
             </div>
-            
+
             {/* Imagem direita */}
-            <div className="hidden md:block">
-              <img 
-                src="https://images.pexels.com/photos/7045836/pexels-photo-7045836.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop" 
-                alt="Logo direita" 
+            <div>
+              <img
+                src="shubudo.png"
+                alt="Logo direita"
                 className="w-24 h-24 object-cover rounded-full shadow-lg"
               />
             </div>
           </div>
         </div>
 
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-          </div>
-        </div>
-
+        {/* Filtros */}
         <FilterButtons
           activeFilter={activeFilter}
           onFilterChange={setActiveFilter}
           eventCounts={eventCounts}
         />
 
+        {/* Conteúdo principal */}
         {loading ? (
           <LoadingSpinner />
         ) : error ? (
@@ -118,6 +116,7 @@ function EventListPage() {
           </div>
         )}
 
+        {/* Rodapé */}
         <div className="text-center mt-16 pt-8 border-t border-gray-200">
           <p className="text-gray-500">
             Mantenha-se conectado para não perder nenhum evento!
@@ -129,7 +128,7 @@ function EventListPage() {
 }
 
 export default function App() {
-  const { refetch } = useEvents(); // useEvents precisa estar aqui ou movido para contexto
+  const { refetch } = useEvents();
 
   return (
     <Routes>
