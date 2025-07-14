@@ -67,12 +67,7 @@ export class EventService {
       title: apiEvent.titulo || 'Evento sem título',
       description: apiEvent.descricao || 'Descrição não disponível',
       date: apiEvent.dataInicio,
-      time: startDate.toLocaleTimeString('pt-BR', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-        timeZone: 'America/Sao_Paulo'
-      }),
+      time: apiEvent.dataInicio.substring(11, 16), // ← aqui pega exatamente a hora do banco (HH:MM)
       location: apiEvent.local || '',
       isPast: eventDateOnly < today
     };
