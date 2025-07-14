@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
-import { Calendar, Filter } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import { Calendar } from 'lucide-react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { EventCard } from './components/EventCard';
 import { CreateEventPage } from './components/CreateEventPage';
 import { FilterButtons } from './components/FilterButtons';
@@ -7,12 +8,10 @@ import { LoadingSpinner } from './components/LoadingSpinner';
 import { ErrorMessage } from './components/ErrorMessage';
 import { useEvents } from './hooks/useEvents';
 
-function App() {
+function EventListPage() {
   const { events, loading, error, refetch } = useEvents();
   const [activeFilter, setActiveFilter] = useState<'all' | 'upcoming' | 'past'>('all');
-
-  // Verifica se a URL contém /criar para mostrar a página de criação
-  const showCreateForm = window.location.pathname === '/criar';
+  const navigate = useNavigate();
 
   const filteredEvents = useMemo(() => {
     switch (activeFilter) {
@@ -28,7 +27,7 @@ function App() {
   const eventCounts = useMemo(() => ({
     all: events.length,
     upcoming: events.filter(event => !event.isPast).length,
-    past: events.filter(event => event.isPast).length
+    past: events.filter(event => event.isPast).length,
   }), [events]);
 
   const sortedEvents = useMemo(() => {
@@ -37,53 +36,38 @@ function App() {
       const dateB = new Date(b.date).getTime();
 
       if (activeFilter === 'past') {
-        return dateB - dateA; // Mais recentes primeiro
+        return dateB - dateA;
       }
-
       if (activeFilter === 'upcoming') {
-        return dateA - dateB; // Mais próximos primeiro
+        return dateA - dateB;
       }
-
-      // Para o filtro "all": mostrar eventos futuros primeiro
       if (a.isPast !== b.isPast) {
-        return a.isPast ? 1 : -1; // Eventos finalizados vão para o final
+        return a.isPast ? 1 : -1;
       }
 
-      return dateA - dateB; // Ordena por data dentro do mesmo grupo
+      return dateA - dateB;
     });
   }, [filteredEvents, activeFilter]);
-
-  if (showCreateForm) {
-    return (
-      <CreateEventPage
-        onBack={() => window.history.pushState({}, '', '/')}
-        onEventCreated={refetch}
-      />
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
             <Calendar className="h-8 w-8 text-blue-600" />
             <h1 className="text-4xl font-bold text-gray-900">Eventos</h1>
           </div>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Descubra eventos incríveis e mantenha-se atualizado com as últimas oportunidades
+            CDL TEAM - Karatê Shubu-Dô Agenda online
           </p>
         </div>
 
-        {/* Filtros */}
         <FilterButtons
           activeFilter={activeFilter}
           onFilterChange={setActiveFilter}
           eventCounts={eventCounts}
         />
 
-        {/* Conteúdo */}
         {loading ? (
           <LoadingSpinner />
         ) : error ? (
@@ -106,7 +90,6 @@ function App() {
           </div>
         )}
 
-        {/* Footer */}
         <div className="text-center mt-16 pt-8 border-t border-gray-200">
           <p className="text-gray-500">
             Mantenha-se conectado para não perder nenhum evento!
@@ -117,4 +100,21 @@ function App() {
   );
 }
 
-export default App;
+export default function App() {
+  const { refetch } = useEvents(); // useEvents precisa estar aqui ou movido para contexto
+
+  return (
+    <Routes>
+      <Route path="/" element={<EventListPage />} />
+      <Route
+        path="/criar"
+        element={
+          <CreateEventPage
+            onBack={() => window.history.back()}
+            onEventCreated={refetch}
+          />
+        }
+      />
+    </Routes>
+  );
+}
