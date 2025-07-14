@@ -53,6 +53,13 @@ export function EventForm({ onSubmit, onCancel, loading = false }: EventFormProp
 
     try {
       await onSubmit(formData);
+      // Limpar formulário após sucesso
+      setFormData({
+        titulo: '',
+        descricao: '',
+        dataInicio: '',
+        local: ''
+      });
     } catch (error) {
       console.error('Erro ao salvar evento:', error);
     }

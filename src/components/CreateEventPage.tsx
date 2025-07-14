@@ -1,24 +1,32 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, CheckCircle, X } from 'lucide-react';
 import { EventForm } from './EventForm';
 import { EventService } from '../services/eventService';
 
 export function CreateEventPage() {
   const [isCreating, setIsCreating] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [createdEventTitle, setCreatedEventTitle] = useState('');
   const navigate = useNavigate();
 
   const handleCreateEvent = async (eventData: any) => {
     try {
       setIsCreating(true);
-      await EventService.createEvent(eventData);
-      navigate('/'); // Volta para a lista após criar
+      const createdEvent = await EventService.createEvent(eventData);
+      setCreatedEventTitle(eventData.titulo);
+      setShowSuccessPopup(true);
     } catch (error) {
       console.error('Erro ao criar evento:', error);
       throw error;
     } finally {
       setIsCreating(false);
     }
+  };
+
+  const handleClosePopup = () => {
+    setShowSuccessPopup(false);
+    setCreatedEventTitle('');
   };
 
   return (
@@ -45,6 +53,47 @@ export function CreateEventPage() {
           />
         </div>
       </div>
+
+      {/* Popup de Sucesso */}
+      {showSuccessPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 transform animate-pulse">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="h-8 w-8 text-green-500" />
+                <h3 className="text-xl font-semibold text-gray-900">
+                  Evento Criado!
+                </h3>
+              </div>
+              <button
+                onClick={handleClosePopup}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+            
+            <p className="text-gray-600 mb-6">
+              O evento <strong>"{createdEventTitle}"</strong> foi criado com sucesso!
+            </p>
+            
+            <div className="flex gap-3">
+              <button
+                onClick={handleClosePopup}
+                className="flex-1 bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors"
+              >
+                Criar Outro Evento
+              </button>
+              <button
+                onClick={() => navigate('/')}
+                className="flex-1 bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition-colors"
+              >
+                Ver Lista de Eventos
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
