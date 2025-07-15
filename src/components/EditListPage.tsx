@@ -3,6 +3,7 @@ import { Calendar, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { EventCard } from './EventCard';
 import { FilterButtons } from './FilterButtons';
+import { SearchBar } from './SearchBar';
 import { LoadingSpinner } from './LoadingSpinner';
 import { ErrorMessage } from './ErrorMessage';
 import { useEvents } from '../hooks/useEvents';
@@ -10,24 +11,38 @@ import { useEvents } from '../hooks/useEvents';
 export function EditListPage() {
   const { events, loading, error, refetch } = useEvents();
   const [activeFilter, setActiveFilter] = useState<'all' | 'upcoming' | 'past'>('all');
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
+
+  // Primeiro aplica a busca, depois o filtro
+  const searchedEvents = useMemo(() => {
+    if (!searchTerm.trim()) {
+      return events;
+    }
+    
+    const term = searchTerm.toLowerCase();
+    return events.filter(event => 
+      event.title.toLowerCase().includes(term) || 
+      event.description.toLowerCase().includes(term)
+    );
+  }, [events, searchTerm]);
 
   const filteredEvents = useMemo(() => {
     switch (activeFilter) {
       case 'upcoming':
-        return events.filter(event => !event.isPast);
+        return searchedEvents.filter(event => !event.isPast);
       case 'past':
-        return events.filter(event => event.isPast);
+        return searchedEvents.filter(event => event.isPast);
       default:
-        return events;
+        return searchedEvents;
     }
-  }, [activeFilter, events]);
+  }, [activeFilter, searchedEvents]);
 
   const eventCounts = useMemo(() => ({
-    all: events.length,
-    upcoming: events.filter(event => !event.isPast).length,
-    past: events.filter(event => event.isPast).length,
-  }), [events]);
+    all: searchedEvents.length,
+    upcoming: searchedEvents.filter(event => !event.isPast).length,
+    past: searchedEvents.filter(event => event.isPast).length,
+  }), [searchedEvents]);
 
   const sortedEvents = useMemo(() => {
     return [...filteredEvents].sort((a, b) => {
@@ -73,6 +88,13 @@ export function EditListPage() {
             </p>
           </div>
         </div>
+
+        {/* Barra de Busca */}
+        <SearchBar
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          resultsCount={filteredEvents.length}
+        />
 
         {/* Filtros */}
         <FilterButtons
