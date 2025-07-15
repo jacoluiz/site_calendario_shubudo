@@ -1,12 +1,16 @@
 import React from 'react';
 import { Calendar, Clock, MapPin, Edit } from 'lucide-react';
 import { Event } from '../types/event';
+import { useLocation } from 'react-router-dom';
 
 interface EventCardProps {
   event: Event;
 }
 
 export function EventCard({ event }: EventCardProps) {
+  const location = useLocation();
+  const showEditButton = location.pathname.startsWith('/editar');
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('pt-BR', {
       weekday: 'long',
@@ -71,19 +75,21 @@ export function EventCard({ event }: EventCardProps) {
           </div>
         )}
         
-        <div className="flex justify-end">
-          <button
-            onClick={() => window.location.href = `/editar/${event.id}`}
-            className={`flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
-              event.isPast 
-                ? 'bg-gray-100 text-gray-500 hover:bg-gray-200' 
-                : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-            }`}
-          >
-            <Edit className="h-3 w-3" />
-            Editar
-          </button>
-        </div>
+        {showEditButton && (
+          <div className="flex justify-end">
+            <button
+              onClick={() => window.location.href = `/editar/${event.id}`}
+              className={`flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
+                event.isPast 
+                  ? 'bg-gray-100 text-gray-500 hover:bg-gray-200' 
+                  : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+              }`}
+            >
+              <Edit className="h-3 w-3" />
+              Editar
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
