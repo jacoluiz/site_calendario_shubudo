@@ -150,7 +150,7 @@ export function EditEventPage() {
               initialData={{
                 titulo: event.title,
                 descricao: event.description,
-                dataInicio: event.date,
+                dataInicio: event.date ? event.date.slice(0, 16) : '',
                 local: event.location || ''
               }}
               onSubmit={handleUpdateEvent}
