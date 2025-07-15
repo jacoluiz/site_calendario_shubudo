@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Clock, MapPin } from 'lucide-react';
+import { Calendar, Clock, MapPin, Edit } from 'lucide-react';
 import { Event } from '../types/event';
 
 interface EventCardProps {
@@ -42,7 +42,7 @@ export function EventCard({ event }: EventCardProps) {
       </p>
       
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 text-sm">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-1">
           <Calendar className={`h-4 w-4 ${
             event.isPast ? 'text-gray-400' : 'text-blue-500'
           }`} />
@@ -70,6 +70,20 @@ export function EventCard({ event }: EventCardProps) {
             </span>
           </div>
         )}
+        
+        <div className="flex justify-end">
+          <button
+            onClick={() => window.location.href = `/editar/${event.id}`}
+            className={`flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
+              event.isPast 
+                ? 'bg-gray-100 text-gray-500 hover:bg-gray-200' 
+                : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+            }`}
+          >
+            <Edit className="h-3 w-3" />
+            Editar
+          </button>
+        </div>
       </div>
     </div>
   );

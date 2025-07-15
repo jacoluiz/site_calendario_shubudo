@@ -3,6 +3,7 @@ import { Calendar } from 'lucide-react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { EventCard } from './components/EventCard';
 import { CreateEventPage } from './components/CreateEventPage';
+import { EditEventPage } from './components/EditEventPage';
 import { FilterButtons } from './components/FilterButtons';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { ErrorMessage } from './components/ErrorMessage';
@@ -142,6 +143,7 @@ export default function App() {
           />
         }
       />
+      <Route path="/editar/:id" element={<EditEventPage />} />
     </Routes>
   );
 }

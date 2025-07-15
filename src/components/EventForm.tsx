@@ -9,20 +9,37 @@ interface EventFormData {
 }
 
 interface EventFormProps {
+  initialData?: EventFormData;
   onSubmit: (eventData: EventFormData) => Promise<void>;
   onCancel: () => void;
   loading?: boolean;
+  submitButtonText?: string;
 }
 
-export function EventForm({ onSubmit, onCancel, loading = false }: EventFormProps) {
-  const [formData, setFormData] = useState<EventFormData>({
-    titulo: '',
-    descricao: '',
-    dataInicio: '',
-    local: ''
-  });
+export function EventForm({ 
+  initialData,
+  onSubmit, 
+  onCancel, 
+  loading = false,
+  submitButtonText = "Salvar Evento"
+}: EventFormProps) {
+  const [formData, setFormData] = useState<EventFormData>(
+    initialData || {
+      titulo: '',
+      descricao: '',
+      dataInicio: '',
+      local: ''
+    }
+  );
 
   const [errors, setErrors] = useState<Partial<EventFormData>>({});
+
+  // Atualizar formData quando initialData mudar
+  React.useEffect(() => {
+    if (initialData) {
+      setFormData(initialData);
+    }
+  }, [initialData]);
 
   const validateForm = (): boolean => {
     const newErrors: Partial<EventFormData> = {};
@@ -53,13 +70,15 @@ export function EventForm({ onSubmit, onCancel, loading = false }: EventFormProp
 
     try {
       await onSubmit(formData);
-      // Limpar formulário após sucesso
-      setFormData({
-        titulo: '',
-        descricao: '',
-        dataInicio: '',
-        local: ''
-      });
+      // Limpar formulário após sucesso apenas se não houver dados iniciais (modo criação)
+      if (!initialData) {
+        setFormData({
+          titulo: '',
+          descricao: '',
+          dataInicio: '',
+          local: ''
+        });
+      }
     } catch (error) {
       console.error('Erro ao salvar evento:', error);
     }
@@ -171,7 +190,7 @@ export function EventForm({ onSubmit, onCancel, loading = false }: EventFormProp
             ) : (
               <>
                 <Save className="h-4 w-4" />
-                Salvar Evento
+                {submitButtonText}
               </>
             )}
           </button>

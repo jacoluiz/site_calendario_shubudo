@@ -51,6 +51,43 @@ export class EventService {
     }
   }
 
+  static async updateEvent(id: string, eventData: CreateEventData): Promise<Event> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/datas/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(eventData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const updatedEvent: ApiEvent = await response.json();
+      return this.transformApiEvent(updatedEvent);
+    } catch (error) {
+      console.error('Erro ao atualizar evento:', error);
+      throw new Error('Falha ao atualizar evento. Verifique sua conexão.');
+    }
+  }
+
+  static async deleteEvent(id: string): Promise<void> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/datas/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error('Erro ao deletar evento:', error);
+      throw new Error('Falha ao deletar evento. Verifique sua conexão.');
+    }
+  }
+
   private static transformApiEvent(apiEvent: ApiEvent): Event {
   const rawDate = apiEvent.dataInicio;
   const startDate = rawDate ? new Date(rawDate) : new Date();
