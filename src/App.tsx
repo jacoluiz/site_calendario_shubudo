@@ -4,6 +4,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import { EventCard } from './components/EventCard';
 import { CreateEventPage } from './components/CreateEventPage';
 import { EditEventPage } from './components/EditEventPage';
+import { EditListPage } from './components/EditListPage';
 import { FilterButtons } from './components/FilterButtons';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { ErrorMessage } from './components/ErrorMessage';
@@ -134,6 +135,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<EventListPage />} />
+      <Route path="/editar" element={<EditListPage />} />
       <Route
         path="/criar"
         element={
